@@ -40,12 +40,19 @@ int pixel_igual(Pixel p1, Pixel p2) {
 }*/
 
 
-Image change_grey_scale(Image img) {
-    /*for (unsigned int i = 0; i < img.h; ++i) {
-        for (unsigned int j = 0; j < img.w; ++j) {
-            print("%u", img.pixel[i][j][0] + img.pixel[i][j][1] + img.pixel[i][j][2]);
+Image read_pixels_image(Image img) {
+
+    for (unsigned int aux_height = 0; aux_height < img.height; ++aux_height) {
+        for (unsigned int aux_width = 0; aux_width < img.width; ++aux_width) {
+            scanf("%hu %hu %hu", &img.pixel[aux_height][aux_width][0],
+                                 &img.pixel[aux_height][aux_width][1],
+                                 &img.pixel[aux_height][aux_width][2]);
         }
-    }*/
+    }
+    return img;
+}
+
+Image change_grey_scale(Image img) {
 
     for (unsigned int i = 0; i < img.height; ++i) {
         for (unsigned int j = 0; j < img.width; ++j) {
@@ -58,22 +65,22 @@ Image change_grey_scale(Image img) {
             img.pixel[i][j][2] = media;
         }
     }
-
     return img;
 }
 
-void blur(unsigned int height, unsigned short int pixel[512][512][3], int T, unsigned int width) {
-    for (unsigned int i = 0; i < height; ++i) {
-        for (unsigned int j = 0; j < width; ++j) {
+void blur(Image img, int T) {
+
+    for (unsigned int i = 0; i < img.height; ++i) {
+        for (unsigned int j = 0; j < img.width; ++j) {
             Pixel media = {0, 0, 0};
 
-            int menor_h = (height - 1 > i + T/2) ? i + T/2 : height - 1;
-            int min_w = (width - 1 > j + T/2) ? j + T/2 : width - 1;
+            int menor_h = (img.height - 1 > i + T/2) ? i + T/2 : img.height - 1;
+            int min_w = (img.width - 1 > j + T/2) ? j + T/2 : img.width - 1;
             for(int x = (0 > i - T/2 ? 0 : i - T/2); x <= menor_h; ++x) {
                 for(int y = (0 > j - T/2 ? 0 : j - T/2); y <= min_w; ++y) {
-                    media.red += pixel[x][y][0];
-                    media.green += pixel[x][y][1];
-                    media.blue += pixel[x][y][2];
+                    media.red += img.pixel[x][y][0];
+                    media.green += img.pixel[x][y][1];
+                    media.blue += img.pixel[x][y][2];
                 }
             }
 
@@ -82,9 +89,9 @@ void blur(unsigned int height, unsigned short int pixel[512][512][3], int T, uns
             media.green /= T * T;
             media.blue /= T * T;
 
-            pixel[i][j][0] = media.red;
-            pixel[i][j][1] = media.green;
-            pixel[i][j][2] = media.blue;
+            img.pixel[i][j][0] = media.red;
+            img.pixel[i][j][1] = media.green;
+            img.pixel[i][j][2] = media.blue;
         }
     }
 }
@@ -102,7 +109,6 @@ Image rotate_90_right(Image img) {
             rotated.pixel[i][j][2] = img.pixel[x][y][2];
         }
     }
-
     return rotated;
 }
 
@@ -149,10 +155,10 @@ Image cut_image(Image img) {
     return cut;
 }
 
-int pixel_size(int p){
+int pixel_size(int p) {
     int menor_r = 0;
 
-    if(255 > p){
+    if(255 > p) {
       menor_r = p;
     } else {
       menor_r = 255;
@@ -161,6 +167,7 @@ int pixel_size(int p){
 }
 
 Image change_sepia_filter(Image img) {
+
     for (unsigned int x = 0; x < img.height; ++x) {
         for (unsigned int j = 0; j < img.width; ++j) {
             unsigned short int pixel[3];
@@ -183,8 +190,9 @@ Image change_sepia_filter(Image img) {
 
 Image change_blur(Image img) {
     int size = 0;
+
     scanf("%d", &size);
-    blur(img.height, img.pixel, size, img.width);
+    blur(img, size);
     return img;
 }
 
@@ -266,23 +274,16 @@ int main() {
     scanf("%u %u %d", &img.width, &img.height, &max_color);
 
     // read all pixels of image
-    for (unsigned int i = 0; i < img.height; ++i) {
-        for (unsigned int j = 0; j < img.width; ++j) {
-            scanf("%hu %hu %hu", &img.pixel[i][j][0],
-                                 &img.pixel[i][j][1],
-                                 &img.pixel[i][j][2]);
+    img = read_pixels_image(img);
 
-        }
-    }
+    int number_options;
+    scanf("%d", &number_options);
 
-    int n_opcoes;
-    scanf("%d", &n_opcoes);
+    for(int number_option = 0; number_option < number_options; ++number_option) {
+        int option;
+        scanf("%d", &option);
 
-    for(int i = 0; i < n_opcoes; ++i) {
-        int opcao;
-        scanf("%d", &opcao);
-
-        switch(opcao) {
+        switch(option) {
             case 1: { // Escala de Cinza
                 img = change_grey_scale(img);
                 break;
