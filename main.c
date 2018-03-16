@@ -16,7 +16,7 @@ typedef struct _image {
     unsigned int height;
 } Image;
 
-
+/*
 int max(int a, int b) {
     if (a > b)
         return a;
@@ -29,10 +29,10 @@ int pixel_igual(Pixel p1, Pixel p2) {
         p1.blue == p2.blue)
         return 1;
     return 0;
-}
+}*/
 
 
-Image escala_de_cinza(Image img) {
+Image change_grey_scale(Image img) {
     /*for (unsigned int i = 0; i < img.h; ++i) {
         for (unsigned int j = 0; j < img.w; ++j) {
             print("%u", img.pixel[i][j][0] + img.pixel[i][j][1] + img.pixel[i][j][2]);
@@ -81,17 +81,17 @@ void blur(unsigned int height, unsigned short int pixel[512][512][3], int T, uns
     }
 }
 
-Image rotacionar90direita(Image img) {
-    Image rotacionada;
+Image rotate_90_right(Image img) {
+    Image rotated;
 
-    rotacionada.width = img.height;
-    rotacionada.height = img.width;
+    rotated.width = img.height;
+    rotated.height = img.width;
 
-    for (unsigned int i = 0, y = 0; i < rotacionada.height; ++i, ++y) {
-        for (int j = rotacionada.width - 1, x = 0; j >= 0; --j, ++x) {
-            rotacionada.pixel[i][j][0] = img.pixel[x][y][0];
-            rotacionada.pixel[i][j][1] = img.pixel[x][y][1];
-            rotacionada.pixel[i][j][2] = img.pixel[x][y][2];
+    for (unsigned int i = 0, y = 0; i < rotated.height; ++i, ++y) {
+        for (int j = rotated.width - 1, x = 0; j >= 0; --j, ++x) {
+            rotated.pixel[i][j][0] = img.pixel[x][y][0];
+            rotated.pixel[i][j][1] = img.pixel[x][y][1];
+            rotated.pixel[i][j][2] = img.pixel[x][y][2];
         }
     }
 
@@ -171,7 +171,7 @@ Image rotate_photo(Image img) {
     scanf("%d", &times);
     times = times % 4;
     for (int rotate = 0; rotate < times; ++rotate) {
-        img = rotacionar90direita(img);
+        img = rotate_90_right(img);
     }
     return img;
 }
@@ -261,7 +261,7 @@ int main() {
 
         switch(opcao) {
             case 1: { // Escala de Cinza
-                img = escala_de_cinza(img);
+                img = change_grey_scale(img);
                 break;
             }
             case 2: { // Filtro Sepia
