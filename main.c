@@ -95,18 +95,20 @@ Image rotate_90_right(Image img) {
         }
     }
 
-    return rotacionada;
+    return rotated;
 }
 
-void invert_colors(unsigned short int pixel[512][512][3],
-                    unsigned int width, unsigned int height) {
-    for (unsigned int i = 0; i < height; ++i) {
-        for (unsigned int j = 0; j < width; ++j) {
-            pixel[i][j][0] = 255 - pixel[i][j][0];
-            pixel[i][j][1] = 255 - pixel[i][j][1];
-            pixel[i][j][2] = 255 - pixel[i][j][2];
+Image invert_colors(Image img) {
+
+    for (unsigned int i = 0; i < img.height; ++i) {
+        for (unsigned int j = 0; j < img.width; ++j) {
+            img.pixel[i][j][0] = 255 - img.pixel[i][j][0];
+            img.pixel[i][j][1] = 255 - img.pixel[i][j][1];
+            img.pixel[i][j][2] = 255 - img.pixel[i][j][2];
         }
     }
+    return img;
+
 }
 
 Image cut_image(Image img, int starting_point_x, int starting_point_y, int width, int height) {
@@ -126,7 +128,7 @@ Image cut_image(Image img, int starting_point_x, int starting_point_y, int width
     return cut;
 }
 
-int tamanho_do_pixel(int p){
+int pixel_size(int p){
     int menor_r = 0;
 
     if(255 > p){
@@ -146,13 +148,13 @@ Image change_sepia_filter(Image img) {
             pixel[2] = img.pixel[x][j][2];
 
             int p =  pixel[0] * .393 + pixel[1] * .769 + pixel[2] * .189;
-            img.pixel[x][j][0] = tamanho_do_pixel(p);
+            img.pixel[x][j][0] = pixel_size(p);
 
             p =  pixel[0] * .349 + pixel[1] * .686 + pixel[2] * .168;
-            img.pixel[x][j][1] = tamanho_do_pixel(p);
+            img.pixel[x][j][1] = pixel_size(p);
 
             p =  pixel[0] * .272 + pixel[1] * .534 + pixel[2] * .131;
-            img.pixel[x][j][2] = tamanho_do_pixel(p);
+            img.pixel[x][j][2] = pixel_size(p);
         }
     }
     return img;
@@ -281,7 +283,7 @@ int main() {
                 break;
             }
             case 6: { // Inversao de Cores
-                invert_colors(img.pixel, img.width, img.height);
+                img = invert_colors(img); 
                 break;
             }
             case 7: { // Cortar Imagem
