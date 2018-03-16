@@ -110,15 +110,13 @@ Image cut_image(Image img) {
     return cut;
 }
 
-int pixel_size(int p) {
-    int menor_r = 0;
+int pixel_size(int int_pixel) {
 
-    if(255 > p) {
-      menor_r = p;
+    if (255 > int_pixel) {
+      return int_pixel;
     } else {
-      menor_r = 255;
+      return 255;
     }
-    return menor_r;
 }
 
 Image change_sepia_filter(Image img) {
@@ -130,20 +128,20 @@ Image change_sepia_filter(Image img) {
             pixel[1] = img.pixel[height][width][1];
             pixel[2] = img.pixel[height][width][2];
 
-            int p =  pixel[0] * .393 + pixel[1] * .769 + pixel[2] * .189;
-            img.pixel[height][width][0] = pixel_size(p);
+            int int_pixel =  pixel[0] * .393 + pixel[1] * .769 + pixel[2] * .189;
+            img.pixel[height][width][0] = pixel_size(int_pixel);
 
-            p =  pixel[0] * .349 + pixel[1] * .686 + pixel[2] * .168;
-            img.pixel[height][width][1] = pixel_size(p);
+            int_pixel =  pixel[0] * .349 + pixel[1] * .686 + pixel[2] * .168;
+            img.pixel[height][width][1] = pixel_size(int_pixel);
 
-            p =  pixel[0] * .272 + pixel[1] * .534 + pixel[2] * .131;
-            img.pixel[height][width][2] = pixel_size(p);
+            int_pixel =  pixel[0] * .272 + pixel[1] * .534 + pixel[2] * .131;
+            img.pixel[height][width][2] = pixel_size(int_pixel);
         }
     }
     return img;
 }
 
-int check_size_image(int img, int size, int var){
+int check_size_image(int img, int size, int var) {
     int size_img; //?
 
     if (img - 1 > var + size/2) {
@@ -154,10 +152,10 @@ int check_size_image(int img, int size, int var){
     return size_img;
 }
 
-int check_positive_number(int size, int var){
+int check_positive_number(int size, int var) {
     int number;
 
-    if (0 > var-size/2){
+    if (0 > var-size/2) {
         number = 0;
     } else {
         number = var - size/2;
