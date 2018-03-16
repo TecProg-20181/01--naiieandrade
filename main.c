@@ -97,8 +97,8 @@ Image cut_image(Image img) {
     cut.width = info.width;
     cut.height = info.height;
 
-    for(int aux_height = 0; aux_height < info.height; ++aux_height) {
-        for(int aux_width = 0; aux_width < info.width; ++aux_width) {
+    for (int aux_height = 0; aux_height < info.height; ++aux_height) {
+        for (int aux_width = 0; aux_width < info.width; ++aux_width) {
             cut.pixel[aux_height][aux_width][0] = img.pixel[aux_height +
                 info.starting_point_y][aux_width + info.starting_point_x][0];
             cut.pixel[aux_height][aux_width][1] = img.pixel[aux_height +
@@ -123,21 +123,21 @@ int pixel_size(int p) {
 
 Image change_sepia_filter(Image img) {
 
-    for (unsigned int x = 0; x < img.height; ++x) {
-        for (unsigned int j = 0; j < img.width; ++j) {
+    for (unsigned int height = 0; height < img.height; ++height) {
+        for (unsigned int width = 0; width < img.width; ++width) {
             unsigned short int pixel[3];
-            pixel[0] = img.pixel[x][j][0];
-            pixel[1] = img.pixel[x][j][1];
-            pixel[2] = img.pixel[x][j][2];
+            pixel[0] = img.pixel[height][width][0];
+            pixel[1] = img.pixel[height][width][1];
+            pixel[2] = img.pixel[height][width][2];
 
             int p =  pixel[0] * .393 + pixel[1] * .769 + pixel[2] * .189;
-            img.pixel[x][j][0] = pixel_size(p);
+            img.pixel[height][width][0] = pixel_size(p);
 
             p =  pixel[0] * .349 + pixel[1] * .686 + pixel[2] * .168;
-            img.pixel[x][j][1] = pixel_size(p);
+            img.pixel[height][width][1] = pixel_size(p);
 
             p =  pixel[0] * .272 + pixel[1] * .534 + pixel[2] * .131;
-            img.pixel[x][j][2] = pixel_size(p);
+            img.pixel[height][width][2] = pixel_size(p);
         }
     }
     return img;
