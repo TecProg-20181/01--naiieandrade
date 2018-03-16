@@ -176,6 +176,58 @@ Image rotate_photo(Image img) {
     return img;
 }
 
+int choose_kind_of_mirror(int horizontal, int width, int height){
+
+    if (horizontal == 1) {
+      return width = width / 2;
+    } else {
+      return height = height / 2;
+    }
+}
+
+Image function_mirror(Image img, int horizontal, int width, int height) {
+    for (int aux_height = 0; aux_height < height; ++aux_height) {
+        for (int aux_width = 0; aux_width < width; ++aux_width) {
+            int x = aux_height;
+            int y = aux_width;
+
+            if (horizontal == 1) {
+              y = img.width - 1 - aux_width;
+            } else {
+              x = img.height - 1 - aux_height;
+            }
+
+            Pixel pixel;
+            pixel.red = img.pixel[aux_height][aux_width][0];
+            pixel.green = img.pixel[aux_height][aux_width][1];
+            pixel.blue = img.pixel[aux_height][aux_width][2];
+
+            img.pixel[aux_height][aux_width][0] = img.pixel[x][y][0];
+            img.pixel[aux_height][aux_width][1] = img.pixel[x][y][1];
+            img.pixel[aux_height][aux_width][2] = img.pixel[x][y][2];
+
+            img.pixel[x][y][0] = pixel.red;
+            img.pixel[x][y][1] = pixel.green;
+            img.pixel[x][y][2] = pixel.blue;
+        }
+    }
+    return img;
+}
+
+Image mirror(Image img) {
+
+    int horizontal = 0;
+    scanf("%d", &horizontal);
+
+    int width = img.width;
+    int height = img.height;
+
+    choose_kind_of_mirror(horizontal, width, height);
+    img = function_mirror(img, horizontal, width, height);
+
+    return img;
+}
+
 
 
 
@@ -225,35 +277,7 @@ int main() {
                 break;
             }
             case 5: { // Espelhamento
-                int horizontal = 0;
-                scanf("%d", &horizontal);
-
-                int width = img.width, height = img.height;
-
-                if (horizontal == 1) width /= 2;
-                else height /= 2;
-
-                for (int i2 = 0; i2 < height; ++i2) {
-                    for (int j = 0; j < width; ++j) {
-                        int x = i2, y = j;
-
-                        if (horizontal == 1) y = img.width - 1 - j;
-                        else x = img.height - 1 - i2;
-
-                        Pixel aux1;
-                        aux1.red = img.pixel[i2][j][0];
-                        aux1.green = img.pixel[i2][j][1];
-                        aux1.blue = img.pixel[i2][j][2];
-
-                        img.pixel[i2][j][0] = img.pixel[x][y][0];
-                        img.pixel[i2][j][1] = img.pixel[x][y][1];
-                        img.pixel[i2][j][2] = img.pixel[x][y][2];
-
-                        img.pixel[x][y][0] = aux1.red;
-                        img.pixel[x][y][1] = aux1.green;
-                        img.pixel[x][y][2] = aux1.blue;
-                    }
-                }
+                img = mirror(img);
                 break;
             }
             case 6: { // Inversao de Cores
