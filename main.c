@@ -158,6 +158,17 @@ Image change_sepia_filter(Image img) {
     return img;
 }
 
+Image rotate_photo(Image img) {
+
+    int times = 0;
+    scanf("%d", &times);
+    times = times % 4;
+    for (int rotate = 0; rotate < times; ++rotate) {
+        img = rotacionar90direita(img);
+    }
+    return img;
+}
+
 
 
 
@@ -205,12 +216,7 @@ int main() {
                 break;
             }
             case 4: { // Rotacao
-                int quantas_vezes = 0;
-                scanf("%d", &quantas_vezes);
-                quantas_vezes %= 4;
-                for (int j = 0; j < quantas_vezes; ++j) {
-                    img = rotacionar90direita(img);
-                }
+                img = rotate_photo(img);
                 break;
             }
             case 5: { // Espelhamento
