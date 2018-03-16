@@ -23,23 +23,6 @@ typedef struct _info_cut_image {
     int height;
 } InfoCutImage;
 
-
-/*
-int max(int a, int b) {
-    if (a > b)
-        return a;
-    return b;
-}
-
-int pixel_igual(Pixel p1, Pixel p2) {
-    if (p1.red == p2.red &&
-        p1.green == p2.green &&
-        p1.blue == p2.blue)
-        return 1;
-    return 0;
-}*/
-
-
 Image read_pixels_image(Image img) {
 
     for (unsigned int aux_height = 0; aux_height < img.height; ++aux_height) {
@@ -265,9 +248,12 @@ Image function_mirror(Image img, int horizontal, int width, int height) {
             pixel.green = img.pixel[aux_height][aux_width][1];
             pixel.blue = img.pixel[aux_height][aux_width][2];
 
-            img.pixel[aux_height][aux_width][0] = img.pixel[var_height][var_width][0];
-            img.pixel[aux_height][aux_width][1] = img.pixel[var_height][var_width][1];
-            img.pixel[aux_height][aux_width][2] = img.pixel[var_height][var_width][2];
+            img.pixel[aux_height][aux_width][0] =
+                img.pixel[var_height][var_width][0];
+            img.pixel[aux_height][aux_width][1] =
+                img.pixel[var_height][var_width][1];
+            img.pixel[aux_height][aux_width][2] =
+                img.pixel[var_height][var_width][2];
 
             img.pixel[var_height][var_width][0] = pixel.red;
             img.pixel[var_height][var_width][1] = pixel.green;
@@ -291,7 +277,24 @@ Image mirror(Image img) {
     return img;
 }
 
+void print(Image img){
 
+    // print type of image
+    printf("P3\n");
+    // print width height and color of image
+    printf("%u %u\n255\n", img.width, img.height);
+
+    // print pixels of image
+    for (unsigned int height = 0; height < img.height; ++height) {
+        for (unsigned int width = 0; width < img.width; ++width) {
+            printf("%hu %hu %hu ", img.pixel[height][width][0],
+                                   img.pixel[height][width][1],
+                                   img.pixel[height][width][2]);
+
+        }
+        printf("\n");
+    }
+}
 
 
 int main() {
@@ -345,23 +348,9 @@ int main() {
                 break;
             }
         }
-
     }
 
-    // print type of image
-    printf("P3\n");
-    // print width height and color of image
-    printf("%u %u\n255\n", img.width, img.height);
+    print(img);
 
-    // print pixels of image
-    for (unsigned int height = 0; height < img.height; ++height) {
-        for (unsigned int width = 0; width < img.width; ++width) {
-            printf("%hu %hu %hu ", img.pixel[height][width][0],
-                                   img.pixel[height][width][1],
-                                   img.pixel[height][width][2]);
-
-        }
-        printf("\n");
-    }
     return 0;
 }
