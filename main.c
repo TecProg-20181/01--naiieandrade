@@ -158,6 +158,13 @@ Image change_sepia_filter(Image img) {
     return img;
 }
 
+Image change_blur(Image img) {
+    int size = 0;
+    scanf("%d", &size);
+    blur(img.height, img.pixel, size, img.width);
+    return img;
+}
+
 Image rotate_photo(Image img) {
 
     int times = 0;
@@ -210,9 +217,7 @@ int main() {
                 break;
             }
             case 3: { // Blur
-                int size = 0;
-                scanf("%d", &size);
-                blur(img.height, img.pixel, size, img.width);
+                img = change_blur(img);
                 break;
             }
             case 4: { // Rotacao
