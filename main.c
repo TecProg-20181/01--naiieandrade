@@ -173,7 +173,7 @@ int check_size_image(int img, int size, int var){
 
 int check_positive_number(int size, int var){
     int number;
-    
+
     if (0 > var-size/2){
         number = 0;
     } else {
@@ -251,13 +251,13 @@ int choose_kind_of_mirror(int horizontal, int width, int height){
 Image function_mirror(Image img, int horizontal, int width, int height) {
     for (int aux_height = 0; aux_height < height; ++aux_height) {
         for (int aux_width = 0; aux_width < width; ++aux_width) {
-            int x = aux_height;
-            int y = aux_width;
+            int var_height = aux_height;
+            int var_width = aux_width;
 
             if (horizontal == 1) {
-              y = img.width - 1 - aux_width;
+              var_width = img.width - 1 - aux_width;
             } else {
-              x = img.height - 1 - aux_height;
+              var_height = img.height - 1 - aux_height;
             }
 
             Pixel pixel;
@@ -265,13 +265,13 @@ Image function_mirror(Image img, int horizontal, int width, int height) {
             pixel.green = img.pixel[aux_height][aux_width][1];
             pixel.blue = img.pixel[aux_height][aux_width][2];
 
-            img.pixel[aux_height][aux_width][0] = img.pixel[x][y][0];
-            img.pixel[aux_height][aux_width][1] = img.pixel[x][y][1];
-            img.pixel[aux_height][aux_width][2] = img.pixel[x][y][2];
+            img.pixel[aux_height][aux_width][0] = img.pixel[var_height][var_width][0];
+            img.pixel[aux_height][aux_width][1] = img.pixel[var_height][var_width][1];
+            img.pixel[aux_height][aux_width][2] = img.pixel[var_height][var_width][2];
 
-            img.pixel[x][y][0] = pixel.red;
-            img.pixel[x][y][1] = pixel.green;
-            img.pixel[x][y][2] = pixel.blue;
+            img.pixel[var_height][var_width][0] = pixel.red;
+            img.pixel[var_height][var_width][1] = pixel.green;
+            img.pixel[var_height][var_width][2] = pixel.blue;
         }
     }
     return img;
