@@ -68,34 +68,6 @@ Image change_grey_scale(Image img) {
     return img;
 }
 
-void blur(Image img, int T) {
-
-    for (unsigned int i = 0; i < img.height; ++i) {
-        for (unsigned int j = 0; j < img.width; ++j) {
-            Pixel media = {0, 0, 0};
-
-            int menor_h = (img.height - 1 > i + T/2) ? i + T/2 : img.height - 1;
-            int min_w = (img.width - 1 > j + T/2) ? j + T/2 : img.width - 1;
-            for(int x = (0 > i - T/2 ? 0 : i - T/2); x <= menor_h; ++x) {
-                for(int y = (0 > j - T/2 ? 0 : j - T/2); y <= min_w; ++y) {
-                    media.red += img.pixel[x][y][0];
-                    media.green += img.pixel[x][y][1];
-                    media.blue += img.pixel[x][y][2];
-                }
-            }
-
-            // printf("%u", media.r)
-            media.red /= T * T;
-            media.green /= T * T;
-            media.blue /= T * T;
-
-            img.pixel[i][j][0] = media.red;
-            img.pixel[i][j][1] = media.green;
-            img.pixel[i][j][2] = media.blue;
-        }
-    }
-}
-
 Image rotate_90_right(Image img) {
     Image rotated;
 
@@ -188,11 +160,71 @@ Image change_sepia_filter(Image img) {
     return img;
 }
 
+int check_size_image(int img, int size, int var){
+    int size_img; //?
+
+    if (img - 1 > var + size/2) {
+        size_img = var + size/2;
+    } else {
+        size_img = img - 1;
+    }
+    return size_img;
+}
+
+int check_positive_number(int size, int var){
+    int number;
+    
+    if (0 > var-size/2){
+        number = 0;
+    } else {
+        number = var - size/2;
+    }
+    return number;
+}
+
+Image blur(Image img, int size) {
+
+    for (unsigned int height = 0; height < img.height; ++height) {
+        for (unsigned int width = 0; width < img.width; ++width) {
+            Pixel media = {0, 0, 0};
+            int size_height;
+            int size_width;
+            int check_height;
+            int check_width;
+            int area = size * size;
+
+            size_height = check_size_image(img.height, size, height);
+            size_width = check_size_image(img.width, size, width);
+
+            check_height = check_positive_number(size,height);
+            check_width = check_positive_number(size,width);
+
+            for(int aux_height = check_height; aux_height <= size_height; ++aux_height) {
+                for(int aux_width = check_width; aux_width <= size_width; ++aux_width) {
+                    media.red += img.pixel[aux_height][aux_width][0];
+                    media.green += img.pixel[aux_height][aux_width][1];
+                    media.blue += img.pixel[aux_height][aux_width][2];
+                }
+            }
+
+            // printf("%u", media.r)
+            media.red /= area;
+            media.green /= area;
+            media.blue /= area;
+
+            img.pixel[height][width][0] = media.red;
+            img.pixel[height][width][1] = media.green;
+            img.pixel[height][width][2] = media.blue;
+        }
+    }
+    return img;
+}
+
 Image change_blur(Image img) {
     int size = 0;
 
     scanf("%d", &size);
-    blur(img, size);
+    img = blur(img, size);
     return img;
 }
 
