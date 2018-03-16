@@ -16,6 +16,14 @@ typedef struct _image {
     unsigned int height;
 } Image;
 
+typedef struct _info_cut_image {
+    int starting_point_x;
+    int starting_point_y;
+    int width;
+    int height;
+} InfoCutImage;
+
+
 /*
 int max(int a, int b) {
     if (a > b)
@@ -111,20 +119,33 @@ Image invert_colors(Image img) {
 
 }
 
-Image cut_image(Image img, int starting_point_x, int starting_point_y, int width, int height) {
+InfoCutImage get_info_to_cut_image(){
+    InfoCutImage img;
+
+    scanf("%d %d", &img.starting_point_x, &img.starting_point_y);
+    scanf("%d %d", &img.width, &img.height);
+
+    return img;
+}
+
+Image cut_image(Image img) {
     Image cut;
+    InfoCutImage info;
+    info = get_info_to_cut_image();
 
-    cut.width = width;
-    cut.height = height;
+    cut.width = info.width;
+    cut.height = info.height;
 
-    for(int aux_height = 0; aux_height < height; ++aux_height) {
-        for(int aux_width = 0; aux_width < width; ++aux_width) {
-            cut.pixel[aux_height][aux_width][0] = img.pixel[aux_height + starting_point_y][aux_width + starting_point_x][0];
-            cut.pixel[aux_height][aux_width][1] = img.pixel[aux_height + starting_point_y][aux_width + starting_point_x][1];
-            cut.pixel[aux_height][aux_width][2] = img.pixel[aux_height + starting_point_y][aux_width + starting_point_x][2];
+    for(int aux_height = 0; aux_height < info.height; ++aux_height) {
+        for(int aux_width = 0; aux_width < info.width; ++aux_width) {
+            cut.pixel[aux_height][aux_width][0] = img.pixel[aux_height +
+                info.starting_point_y][aux_width + info.starting_point_x][0];
+            cut.pixel[aux_height][aux_width][1] = img.pixel[aux_height +
+                info.starting_point_y][aux_width + info.starting_point_x][1];
+            cut.pixel[aux_height][aux_width][2] = img.pixel[aux_height +
+                info.starting_point_y][aux_width + info.starting_point_x][2];
         }
     }
-
     return cut;
 }
 
@@ -283,17 +304,11 @@ int main() {
                 break;
             }
             case 6: { // Inversao de Cores
-                img = invert_colors(img); 
+                img = invert_colors(img);
                 break;
             }
             case 7: { // Cortar Imagem
-                int starting_point_x;
-                int starting_point_y;
-                scanf("%d %d", &starting_point_x, &starting_point_y);
-                int width, height;
-                scanf("%d %d", &width, &height);
-
-                img = cut_image(img, starting_point_x, starting_point_y, width, height);
+                img = cut_image(img);
                 break;
             }
         }
