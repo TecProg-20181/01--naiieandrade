@@ -98,7 +98,7 @@ Image rotacionar90direita(Image img) {
     return rotacionada;
 }
 
-void inverter_cores(unsigned short int pixel[512][512][3],
+void invert_colors(unsigned short int pixel[512][512][3],
                     unsigned int width, unsigned int height) {
     for (unsigned int i = 0; i < height; ++i) {
         for (unsigned int j = 0; j < width; ++j) {
@@ -109,21 +109,21 @@ void inverter_cores(unsigned short int pixel[512][512][3],
     }
 }
 
-Image cortar_imagem(Image img, int x, int y, int width, int height) {
-    Image cortada;
+Image cut_image(Image img, int starting_point_x, int starting_point_y, int width, int height) {
+    Image cut;
 
-    cortada.width = width;
-    cortada.height = height;
+    cut.width = width;
+    cut.height = height;
 
-    for(int i = 0; i < height; ++i) {
-        for(int j = 0; j < width; ++j) {
-            cortada.pixel[i][j][0] = img.pixel[i + y][j + x][0];
-            cortada.pixel[i][j][1] = img.pixel[i + y][j + x][1];
-            cortada.pixel[i][j][2] = img.pixel[i + y][j + x][2];
+    for(int aux_height = 0; aux_height < height; ++aux_height) {
+        for(int aux_width = 0; aux_width < width; ++aux_width) {
+            cut.pixel[aux_height][aux_width][0] = img.pixel[aux_height + starting_point_y][aux_width + starting_point_x][0];
+            cut.pixel[aux_height][aux_width][1] = img.pixel[aux_height + starting_point_y][aux_width + starting_point_x][1];
+            cut.pixel[aux_height][aux_width][2] = img.pixel[aux_height + starting_point_y][aux_width + starting_point_x][2];
         }
     }
 
-    return cortada;
+    return cut;
 }
 
 int tamanho_do_pixel(int p){
@@ -281,16 +281,17 @@ int main() {
                 break;
             }
             case 6: { // Inversao de Cores
-                inverter_cores(img.pixel, img.width, img.height);
+                invert_colors(img.pixel, img.width, img.height);
                 break;
             }
             case 7: { // Cortar Imagem
-                int x, y;
-                scanf("%d %d", &x, &y);
+                int starting_point_x;
+                int starting_point_y;
+                scanf("%d %d", &starting_point_x, &starting_point_y);
                 int width, height;
                 scanf("%d %d", &width, &height);
 
-                img = cortar_imagem(img, x, y, width, height);
+                img = cut_image(img, starting_point_x, starting_point_y, width, height);
                 break;
             }
         }
@@ -303,11 +304,11 @@ int main() {
     printf("%u %u\n255\n", img.width, img.height);
 
     // print pixels of image
-    for (unsigned int i = 0; i < img.height; ++i) {
-        for (unsigned int j = 0; j < img.width; ++j) {
-            printf("%hu %hu %hu ", img.pixel[i][j][0],
-                                   img.pixel[i][j][1],
-                                   img.pixel[i][j][2]);
+    for (unsigned int height = 0; height < img.height; ++height) {
+        for (unsigned int width = 0; width < img.width; ++width) {
+            printf("%hu %hu %hu ", img.pixel[height][width][0],
+                                   img.pixel[height][width][1],
+                                   img.pixel[height][width][2]);
 
         }
         printf("\n");
