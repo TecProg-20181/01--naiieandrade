@@ -110,13 +110,15 @@ Image cut_image(Image img) {
     return cut;
 }
 
-int pixel_size(int int_pixel) {
+int get_pixel_size(int int_pixel) {
+    int pixel_size = 0;
 
     if (255 > int_pixel) {
-      return int_pixel;
+      pixel_size = int_pixel;
     } else {
-      return 255;
+      pixel_size = 255;
     }
+    return pixel_size;
 }
 
 Image change_sepia_filter(Image img) {
@@ -129,31 +131,31 @@ Image change_sepia_filter(Image img) {
             pixel[2] = img.pixel[height][width][2];
 
             int int_pixel =  pixel[0] * .393 + pixel[1] * .769 + pixel[2] * .189;
-            img.pixel[height][width][0] = pixel_size(int_pixel);
+            img.pixel[height][width][0] = get_pixel_size(int_pixel);
 
             int_pixel =  pixel[0] * .349 + pixel[1] * .686 + pixel[2] * .168;
-            img.pixel[height][width][1] = pixel_size(int_pixel);
+            img.pixel[height][width][1] = get_pixel_size(int_pixel);
 
             int_pixel =  pixel[0] * .272 + pixel[1] * .534 + pixel[2] * .131;
-            img.pixel[height][width][2] = pixel_size(int_pixel);
+            img.pixel[height][width][2] = get_pixel_size(int_pixel);
         }
     }
     return img;
 }
 
 int check_size_image(int img, int size, int var) {
-    int size_img; //?
+    int size_img;
 
     if (img - 1 > var + size/2) {
         size_img = var + size/2;
     } else {
-        size_img = img - 1;
+        size_img =  img - 1;
     }
     return size_img;
 }
 
 int check_positive_number(int size, int var) {
-    int number;
+    int number = 0;
 
     if (0 > var-size/2) {
         number = 0;
@@ -163,16 +165,21 @@ int check_positive_number(int size, int var) {
     return number;
 }
 
+int get_color_pixel_per_area(unsigned short int color_pixel, int size) {
+    int area = 0;
+    area = size * size;
+    return (color_pixel = color_pixel / area);
+}
+
 Image blur(Image img, int size) {
 
     for (unsigned int height = 0; height < img.height; ++height) {
         for (unsigned int width = 0; width < img.width; ++width) {
             Pixel media = {0, 0, 0};
-            int size_height;
-            int size_width;
-            int check_height;
-            int check_width;
-            int area = size * size;
+            int size_height = 0;
+            int size_width = 0;
+            int check_height = 0;
+            int check_width = 0;
 
             size_height = check_size_image(img.height, size, height);
             size_width = check_size_image(img.width, size, width);
@@ -180,22 +187,17 @@ Image blur(Image img, int size) {
             check_height = check_positive_number(size,height);
             check_width = check_positive_number(size,width);
 
-            for(int aux_height = check_height; aux_height <= size_height; ++aux_height) {
-                for(int aux_width = check_width; aux_width <= size_width; ++aux_width) {
+            for (int aux_height = check_height; aux_height <= size_height; ++aux_height) {
+                for (int aux_width = check_width; aux_width <= size_width; ++aux_width) {
                     media.red += img.pixel[aux_height][aux_width][0];
                     media.green += img.pixel[aux_height][aux_width][1];
                     media.blue += img.pixel[aux_height][aux_width][2];
                 }
             }
 
-            // printf("%u", media.r)
-            media.red /= area;
-            media.green /= area;
-            media.blue /= area;
-
-            img.pixel[height][width][0] = media.red;
-            img.pixel[height][width][1] = media.green;
-            img.pixel[height][width][2] = media.blue;
+            img.pixel[height][width][0] = get_color_pixel_per_area(media.red, size);
+            img.pixel[height][width][1] = get_color_pixel_per_area(media.green, size);
+            img.pixel[height][width][2] = get_color_pixel_per_area(media.blue, size);
         }
     }
     return img;
@@ -220,20 +222,25 @@ Image rotate_photo(Image img) {
     return img;
 }
 
-int choose_kind_of_mirror(int horizontal, int width, int height){
+int choose_kind_of_mirror(int horizontal, int width, int height) {
+    int times_mirror = 0;
 
     if (horizontal == 1) {
-      return width = width / 2;
+      times_mirror = width = width / 2;
     } else {
-      return height = height / 2;
+      times_mirror = height = height / 2;
     }
+    return times_mirror;
 }
 
 Image function_mirror(Image img, int horizontal, int width, int height) {
     for (int aux_height = 0; aux_height < height; ++aux_height) {
         for (int aux_width = 0; aux_width < width; ++aux_width) {
-            int var_height = aux_height;
-            int var_width = aux_width;
+            int var_height = 0;
+            int var_width = 0;
+
+            var_height = aux_height;
+            var_width = aux_width;
 
             if (horizontal == 1) {
               var_width = img.width - 1 - aux_width;
@@ -262,12 +269,14 @@ Image function_mirror(Image img, int horizontal, int width, int height) {
 }
 
 Image mirror(Image img) {
-
     int horizontal = 0;
+    int width = 0;
+    int height = 0;
+
     scanf("%d", &horizontal);
 
-    int width = img.width;
-    int height = img.height;
+    width = img.width;
+    height = img.height;
 
     choose_kind_of_mirror(horizontal, width, height);
     img = function_mirror(img, horizontal, width, height);
@@ -317,11 +326,11 @@ int main() {
         scanf("%d", &option);
 
         switch(option) {
-            case 1: { // Escala de Cinza
+            case 1: { // Grey Scale
                 img = change_grey_scale(img);
                 break;
             }
-            case 2: { // Filtro Sepia
+            case 2: { // Sepia Filter
                 img = change_sepia_filter(img);
                 break;
             }
@@ -329,19 +338,19 @@ int main() {
                 img = change_blur(img);
                 break;
             }
-            case 4: { // Rotacao
+            case 4: { // Rotate Photo
                 img = rotate_photo(img);
                 break;
             }
-            case 5: { // Espelhamento
+            case 5: { // Mirror Photo
                 img = mirror(img);
                 break;
             }
-            case 6: { // Inversao de Cores
+            case 6: { // Color Inversion
                 img = invert_colors(img);
                 break;
             }
-            case 7: { // Cortar Imagem
+            case 7: { // Cut Image
                 img = cut_image(img);
                 break;
             }
