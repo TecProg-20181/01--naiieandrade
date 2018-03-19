@@ -171,7 +171,17 @@ int get_color_pixel_per_area(unsigned short int color_pixel, int size) {
     return (color_pixel = color_pixel / area);
 }
 
-Image blur(Image img, int size) {
+int size_blur() {
+    int size = 0;
+
+    scanf("%d", &size);
+    return size;
+}
+
+Image blur(Image img) {
+    int size = 0;
+
+    size = size_blur();
 
     for (unsigned int height = 0; height < img.height; ++height) {
         for (unsigned int width = 0; width < img.width; ++width) {
@@ -200,14 +210,6 @@ Image blur(Image img, int size) {
             img.pixel[height][width][2] = get_color_pixel_per_area(media.blue, size);
         }
     }
-    return img;
-}
-
-Image change_blur(Image img) {
-    int size = 0;
-
-    scanf("%d", &size);
-    img = blur(img, size);
     return img;
 }
 
@@ -335,7 +337,7 @@ int main() {
                 break;
             }
             case 3: { // Blur
-                img = change_blur(img);
+                img = blur(img);
                 break;
             }
             case 4: { // Rotate Photo
