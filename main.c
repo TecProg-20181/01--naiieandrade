@@ -224,17 +224,6 @@ Image rotate_photo(Image img) {
     return img;
 }
 
-int choose_kind_of_mirror(int horizontal, int width, int height) {
-    int times_mirror = 0;
-
-    if (horizontal == 1) {
-      times_mirror = width = width / 2;
-    } else {
-      times_mirror = height = height / 2;
-    }
-    return times_mirror;
-}
-
 Image function_mirror(Image img, int horizontal, int width, int height) {
     for (int aux_height = 0; aux_height < height; ++aux_height) {
         for (int aux_width = 0; aux_width < width; ++aux_width) {
@@ -274,13 +263,19 @@ Image mirror(Image img) {
     int horizontal = 0;
     int width = 0;
     int height = 0;
+    int times_mirror = 0;
 
     scanf("%d", &horizontal);
+
+    if (horizontal == 1) {
+      times_mirror = width = width / 2;
+    } else {
+      times_mirror = height = height / 2;
+    }
 
     width = img.width;
     height = img.height;
 
-    choose_kind_of_mirror(horizontal, width, height);
     img = function_mirror(img, horizontal, width, height);
 
     return img;
