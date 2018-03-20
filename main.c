@@ -25,11 +25,11 @@ typedef struct _info_cut_image {
 
 Image read_pixels_image(Image img) {
 
-    for (unsigned int aux_height = 0; aux_height < img.height; ++aux_height) {
-        for (unsigned int aux_width = 0; aux_width < img.width; ++aux_width) {
-            scanf("%hu %hu %hu", &img.pixel[aux_height][aux_width][0],
-                                 &img.pixel[aux_height][aux_width][1],
-                                 &img.pixel[aux_height][aux_width][2]);
+    for (unsigned int pixel_y = 0; pixel_y < img.height; ++pixel_y) {
+        for (unsigned int pixel_x = 0; pixel_x < img.width; ++pixel_x) {
+            scanf("%hu %hu %hu", &img.pixel[pixel_y][pixel_x][0],
+                                 &img.pixel[pixel_y][pixel_x][1],
+                                 &img.pixel[pixel_y][pixel_x][2]);
         }
     }
     return img;
@@ -37,15 +37,15 @@ Image read_pixels_image(Image img) {
 
 Image change_grey_scale(Image img) {
 
-    for (unsigned int i = 0; i < img.height; ++i) {
-        for (unsigned int j = 0; j < img.width; ++j) {
-            int media = img.pixel[i][j][0] +
-                        img.pixel[i][j][1] +
-                        img.pixel[i][j][2];
-            media /= 3;
-            img.pixel[i][j][0] = media;
-            img.pixel[i][j][1] = media;
-            img.pixel[i][j][2] = media;
+    for (unsigned int pixel_y = 0; pixel_y < img.height; ++pixel_y) {
+        for (unsigned int pixel_x = 0; pixel_x < img.width; ++pixel_x) {
+            int media = img.pixel[pixel_y][pixel_x][0] +
+                        img.pixel[pixel_y][pixel_x][1] +
+                        img.pixel[pixel_y][pixel_x][2];
+            media = media / 3;
+            img.pixel[pixel_y][pixel_x][0] = media;
+            img.pixel[pixel_y][pixel_x][1] = media;
+            img.pixel[pixel_y][pixel_x][2] = media;
         }
     }
     return img;
@@ -69,11 +69,11 @@ Image rotate_90_right(Image img) {
 
 Image invert_colors(Image img) {
 
-    for (unsigned int i = 0; i < img.height; ++i) {
-        for (unsigned int j = 0; j < img.width; ++j) {
-            img.pixel[i][j][0] = 255 - img.pixel[i][j][0];
-            img.pixel[i][j][1] = 255 - img.pixel[i][j][1];
-            img.pixel[i][j][2] = 255 - img.pixel[i][j][2];
+    for (unsigned int pixel_y = 0; pixel_y < img.height; ++pixel_y) {
+        for (unsigned int pixel_x = 0; pixel_x < img.width; ++pixel_x) {
+            img.pixel[pixel_y][pixel_x][0] = 255 - img.pixel[pixel_y][pixel_x][0];
+            img.pixel[pixel_y][pixel_x][1] = 255 - img.pixel[pixel_y][pixel_x][1];
+            img.pixel[pixel_y][pixel_x][2] = 255 - img.pixel[pixel_y][pixel_x][2];
         }
     }
     return img;
@@ -97,20 +97,20 @@ Image cut_image(Image img) {
     cut.width = info.width;
     cut.height = info.height;
 
-    for (int aux_height = 0; aux_height < info.height; ++aux_height) {
-        for (int aux_width = 0; aux_width < info.width; ++aux_width) {
-            cut.pixel[aux_height][aux_width][0] = img.pixel[aux_height +
-                info.starting_point_y][aux_width + info.starting_point_x][0];
-            cut.pixel[aux_height][aux_width][1] = img.pixel[aux_height +
-                info.starting_point_y][aux_width + info.starting_point_x][1];
-            cut.pixel[aux_height][aux_width][2] = img.pixel[aux_height +
-                info.starting_point_y][aux_width + info.starting_point_x][2];
+    for (int pixel_y = 0; pixel_y < info.height; ++pixel_y) {
+        for (int pixel_x = 0; pixel_x < info.width; ++pixel_x) {
+            cut.pixel[pixel_y][pixel_x][0] = img.pixel[pixel_y +
+                info.starting_point_y][pixel_x + info.starting_point_x][0];
+            cut.pixel[pixel_y][pixel_x][1] = img.pixel[pixel_y +
+                info.starting_point_y][pixel_x + info.starting_point_x][1];
+            cut.pixel[pixel_y][pixel_x][2] = img.pixel[pixel_y +
+                info.starting_point_y][pixel_x + info.starting_point_x][2];
         }
     }
     return cut;
 }
 
-int get_pixel_size(int int_pixel) {
+int check_pixel_size_max(int int_pixel) {
     int pixel_size = 0;
 
     if (255 > int_pixel) {
@@ -123,21 +123,21 @@ int get_pixel_size(int int_pixel) {
 
 Image change_sepia_filter(Image img) {
 
-    for (unsigned int height = 0; height < img.height; ++height) {
-        for (unsigned int width = 0; width < img.width; ++width) {
+    for (unsigned int pixel_y = 0; pixel_y < img.height; ++pixel_y) {
+        for (unsigned int pixel_x = 0; pixel_x < img.width; ++pixel_x) {
             unsigned short int pixel[3];
-            pixel[0] = img.pixel[height][width][0];
-            pixel[1] = img.pixel[height][width][1];
-            pixel[2] = img.pixel[height][width][2];
+            pixel[0] = img.pixel[pixel_y][pixel_x][0];
+            pixel[1] = img.pixel[pixel_y][pixel_x][1];
+            pixel[2] = img.pixel[pixel_y][pixel_x][2];
 
             int int_pixel =  pixel[0] * .393 + pixel[1] * .769 + pixel[2] * .189;
-            img.pixel[height][width][0] = get_pixel_size(int_pixel);
+            img.pixel[pixel_y][pixel_x][0] = check_pixel_size_max(int_pixel);
 
             int_pixel =  pixel[0] * .349 + pixel[1] * .686 + pixel[2] * .168;
-            img.pixel[height][width][1] = get_pixel_size(int_pixel);
+            img.pixel[pixel_y][pixel_x][1] = check_pixel_size_max(int_pixel);
 
             int_pixel =  pixel[0] * .272 + pixel[1] * .534 + pixel[2] * .131;
-            img.pixel[height][width][2] = get_pixel_size(int_pixel);
+            img.pixel[pixel_y][pixel_x][2] = check_pixel_size_max(int_pixel);
         }
     }
     return img;
@@ -171,7 +171,7 @@ int get_color_pixel_per_area(unsigned short int color_pixel, int size) {
     return (color_pixel = color_pixel / area);
 }
 
-int size_blur() {
+int get_size_blur() {
     int size = 0;
 
     scanf("%d", &size);
@@ -181,33 +181,33 @@ int size_blur() {
 Image blur(Image img) {
     int size = 0;
 
-    size = size_blur();
+    size = get_size_blur();
 
-    for (unsigned int height = 0; height < img.height; ++height) {
-        for (unsigned int width = 0; width < img.width; ++width) {
+    for (unsigned int pixel_y = 0; pixel_y < img.height; ++pixel_y) {
+        for (unsigned int pixel_x = 0; pixel_x < img.width; ++pixel_x) {
             Pixel media = {0, 0, 0};
             int size_height = 0;
             int size_width = 0;
             int check_height = 0;
             int check_width = 0;
 
-            size_height = check_size_image(img.height, size, height);
-            size_width = check_size_image(img.width, size, width);
+            size_height = check_size_image(img.height, size, pixel_y);
+            size_width = check_size_image(img.width, size, pixel_x);
 
-            check_height = check_positive_number(size,height);
-            check_width = check_positive_number(size,width);
+            check_height = check_positive_number(size,pixel_y);
+            check_width = check_positive_number(size,pixel_x);
 
-            for (int aux_height = check_height; aux_height <= size_height; ++aux_height) {
-                for (int aux_width = check_width; aux_width <= size_width; ++aux_width) {
-                    media.red += img.pixel[aux_height][aux_width][0];
-                    media.green += img.pixel[aux_height][aux_width][1];
-                    media.blue += img.pixel[aux_height][aux_width][2];
+            for (int pixel_y = check_height; pixel_y <= size_height; ++pixel_y) {
+                for (int pixel_x = check_width; pixel_x <= size_width; ++pixel_x) {
+                    media.red += img.pixel[pixel_y][pixel_x][0];
+                    media.green += img.pixel[pixel_y][pixel_x][1];
+                    media.blue += img.pixel[pixel_y][pixel_x][2];
                 }
             }
 
-            img.pixel[height][width][0] = get_color_pixel_per_area(media.red, size);
-            img.pixel[height][width][1] = get_color_pixel_per_area(media.green, size);
-            img.pixel[height][width][2] = get_color_pixel_per_area(media.blue, size);
+            img.pixel[pixel_y][pixel_x][0] = get_color_pixel_per_area(media.red, size);
+            img.pixel[pixel_y][pixel_x][1] = get_color_pixel_per_area(media.green, size);
+            img.pixel[pixel_y][pixel_x][2] = get_color_pixel_per_area(media.blue, size);
         }
     }
     return img;
@@ -225,30 +225,30 @@ Image rotate_photo(Image img) {
 }
 
 Image function_mirror(Image img, int horizontal, int width, int height) {
-    for (int aux_height = 0; aux_height < height; ++aux_height) {
-        for (int aux_width = 0; aux_width < width; ++aux_width) {
+    for (int pixel_y = 0; pixel_y < height; ++pixel_y) {
+        for (int pixel_x = 0; pixel_x < width; ++pixel_x) {
             int var_height = 0;
             int var_width = 0;
 
-            var_height = aux_height;
-            var_width = aux_width;
+            var_height = pixel_y;
+            var_width = pixel_x;
 
             if (horizontal == 1) {
-              var_width = img.width - 1 - aux_width;
+              var_width = img.width - 1 - pixel_x;
             } else {
-              var_height = img.height - 1 - aux_height;
+              var_height = img.height - 1 - pixel_y;
             }
 
             Pixel pixel;
-            pixel.red = img.pixel[aux_height][aux_width][0];
-            pixel.green = img.pixel[aux_height][aux_width][1];
-            pixel.blue = img.pixel[aux_height][aux_width][2];
+            pixel.red = img.pixel[pixel_y][pixel_x][0];
+            pixel.green = img.pixel[pixel_y][pixel_x][1];
+            pixel.blue = img.pixel[pixel_y][pixel_x][2];
 
-            img.pixel[aux_height][aux_width][0] =
+            img.pixel[pixel_y][pixel_x][0] =
                 img.pixel[var_height][var_width][0];
-            img.pixel[aux_height][aux_width][1] =
+            img.pixel[pixel_y][pixel_x][1] =
                 img.pixel[var_height][var_width][1];
-            img.pixel[aux_height][aux_width][2] =
+            img.pixel[pixel_y][pixel_x][2] =
                 img.pixel[var_height][var_width][2];
 
             img.pixel[var_height][var_width][0] = pixel.red;
