@@ -51,22 +51,6 @@ Image change_grey_scale(Image img) {
     return img;
 }
 
-Image rotate_90_right(Image img) {
-    Image rotated;
-
-    rotated.width = img.height;
-    rotated.height = img.width;
-
-    for (unsigned int i = 0, y = 0; i < rotated.height; ++i, ++y) {
-        for (int j = rotated.width - 1, x = 0; j >= 0; --j, ++x) {
-            rotated.pixel[i][j][0] = img.pixel[x][y][0];
-            rotated.pixel[i][j][1] = img.pixel[x][y][1];
-            rotated.pixel[i][j][2] = img.pixel[x][y][2];
-        }
-    }
-    return rotated;
-}
-
 Image invert_colors(Image img) {
 
     for (unsigned int pixel_y = 0; pixel_y < img.height; ++pixel_y) {
@@ -211,6 +195,22 @@ Image blur(Image img) {
         }
     }
     return img;
+}
+
+Image rotate_90_right(Image img) {
+    Image rotated;
+
+    rotated.width = img.height;
+    rotated.height = img.width;
+
+    for (unsigned int i = 0, y = 0; i < rotated.height; ++i, ++y) {
+        for (int j = rotated.width - 1, x = 0; j >= 0; --j, ++x) {
+            rotated.pixel[i][j][0] = img.pixel[x][y][0];
+            rotated.pixel[i][j][1] = img.pixel[x][y][1];
+            rotated.pixel[i][j][2] = img.pixel[x][y][2];
+        }
+    }
+    return rotated;
 }
 
 Image rotate_photo(Image img) {
