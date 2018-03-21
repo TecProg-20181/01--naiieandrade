@@ -35,14 +35,23 @@ Image read_pixels_image(Image img) {
     return img;
 }
 
+int get_media(Image img, int pixel_y, int pixel_x, int media) {
+  media = img.pixel[pixel_y][pixel_x][0] +
+          img.pixel[pixel_y][pixel_x][1] +
+          img.pixel[pixel_y][pixel_x][2];
+
+  media = media/3;
+  return media;
+}
+
 Image change_grey_scale(Image img) {
 
     for (unsigned int pixel_y = 0; pixel_y < img.height; ++pixel_y) {
         for (unsigned int pixel_x = 0; pixel_x < img.width; ++pixel_x) {
-            int media = img.pixel[pixel_y][pixel_x][0] +
-                        img.pixel[pixel_y][pixel_x][1] +
-                        img.pixel[pixel_y][pixel_x][2];
-            media = media / 3;
+            int media = 0;
+
+            media = get_media(img, pixel_y, pixel_x, media);
+
             img.pixel[pixel_y][pixel_x][0] = media;
             img.pixel[pixel_y][pixel_x][1] = media;
             img.pixel[pixel_y][pixel_x][2] = media;
@@ -110,11 +119,13 @@ Image change_sepia_filter(Image img) {
     for (unsigned int pixel_y = 0; pixel_y < img.height; ++pixel_y) {
         for (unsigned int pixel_x = 0; pixel_x < img.width; ++pixel_x) {
             unsigned short int pixel[3];
+            int int_pixel = 0;
+
             pixel[0] = img.pixel[pixel_y][pixel_x][0];
             pixel[1] = img.pixel[pixel_y][pixel_x][1];
             pixel[2] = img.pixel[pixel_y][pixel_x][2];
 
-            int int_pixel =  pixel[0] * .393 + pixel[1] * .769 + pixel[2] * .189;
+            int_pixel =  pixel[0] * .393 + pixel[1] * .769 + pixel[2] * .189;
             img.pixel[pixel_y][pixel_x][0] = check_pixel_size_max(int_pixel);
 
             int_pixel =  pixel[0] * .349 + pixel[1] * .686 + pixel[2] * .168;
