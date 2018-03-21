@@ -41,6 +41,7 @@ int get_media(Image img, int pixel_y, int pixel_x, int media) {
           img.pixel[pixel_y][pixel_x][2];
 
   media = media/3;
+
   return media;
 }
 
