@@ -36,13 +36,13 @@ Image read_pixels_image(Image img) {
 }
 
 int get_media(Image img, int pixel_y, int pixel_x, int media) {
-  media = img.pixel[pixel_y][pixel_x][0] +
-          img.pixel[pixel_y][pixel_x][1] +
-          img.pixel[pixel_y][pixel_x][2];
+    media = img.pixel[pixel_y][pixel_x][0] +
+            img.pixel[pixel_y][pixel_x][1] +
+            img.pixel[pixel_y][pixel_x][2];
 
-  media = media/3;
+    media = media/3;
 
-  return media;
+    return media;
 }
 
 Image change_grey_scale(Image img) {
@@ -236,36 +236,36 @@ Image rotate_photo(Image img) {
     return img;
 }
 
-Image function_mirror(Image img, int horizontal, int width, int height) {
-    for (int pixel_y = 0; pixel_y < height; ++pixel_y) {
-        for (int pixel_x = 0; pixel_x < width; ++pixel_x) {
-            int var_height = 0;
-            int var_width = 0;
-
-            var_height = pixel_y;
-            var_width = pixel_x;
+Image function_mirror(Image img, int horizontal, int inversion_point_x, int inversion_point_y) {
+    for (int pixel_y = 0; pixel_y < inversion_point_y; ++pixel_y) {
+        for (int pixel_x = 0; pixel_x < inversion_point_x; ++pixel_x) {
+            int inversion_point_y = 0;
+            int inversion_point_x = 0;
 
             if (horizontal == 1) {
-              var_width = img.width - 1 - pixel_x;
+              inversion_point_x = img.width - 1 - pixel_x;
+              inversion_point_y = pixel_y;
             } else {
-              var_height = img.height - 1 - pixel_y;
+              inversion_point_y = img.height - 1 - pixel_y;
+              inversion_point_x = pixel_x;
             }
 
             Pixel pixel;
+
             pixel.red = img.pixel[pixel_y][pixel_x][0];
             pixel.green = img.pixel[pixel_y][pixel_x][1];
             pixel.blue = img.pixel[pixel_y][pixel_x][2];
 
             img.pixel[pixel_y][pixel_x][0] =
-                img.pixel[var_height][var_width][0];
+                img.pixel[inversion_point_y][inversion_point_x][0];
             img.pixel[pixel_y][pixel_x][1] =
-                img.pixel[var_height][var_width][1];
+                img.pixel[inversion_point_y][inversion_point_x][1];
             img.pixel[pixel_y][pixel_x][2] =
-                img.pixel[var_height][var_width][2];
+                img.pixel[inversion_point_y][inversion_point_x][2];
 
-            img.pixel[var_height][var_width][0] = pixel.red;
-            img.pixel[var_height][var_width][1] = pixel.green;
-            img.pixel[var_height][var_width][2] = pixel.blue;
+            img.pixel[inversion_point_y][inversion_point_x][0] = pixel.red;
+            img.pixel[inversion_point_y][inversion_point_x][1] = pixel.green;
+            img.pixel[inversion_point_y][inversion_point_x][2] = pixel.blue;
         }
     }
     return img;
@@ -273,22 +273,20 @@ Image function_mirror(Image img, int horizontal, int width, int height) {
 
 Image mirror(Image img) {
     int horizontal = 0;
-    int width = 0;
-    int height = 0;
-    int times_mirror = 0;
+    int inversion_point_x = 0;
+    int inversion_point_y = 0;
 
     scanf("%d", &horizontal);
 
     if (horizontal == 1) {
-      times_mirror = width = width / 2;
+        inversion_point_x = img.width / 2;
+        inversion_point_y = img.height;
     } else {
-      times_mirror = height = height / 2;
+        inversion_point_y = img.height / 2;
+        inversion_point_x = img.width;
     }
 
-    width = img.width;
-    height = img.height;
-
-    img = function_mirror(img, horizontal, width, height);
+    img = function_mirror(img, horizontal, inversion_point_x, inversion_point_y);
 
     return img;
 }
